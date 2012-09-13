@@ -89,10 +89,13 @@ url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d
     name="edit_occurrence_by_date"),
     
 
-#feed urls 
+"""
+#feed urls - temporary disable the feed url because it doesn't compatible
+#with Django version >= 1.2
 url(r'^feed/calendar/(.*)/$',
     'django.contrib.syndication.views.feed', 
     { "feed_dict": { "upcoming": UpcomingEventsFeed } }),
+"""
  
 (r'^ical/calendar/(.*)/$', CalendarICalendar()),
 
