@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import *
 from django.views.generic.list_detail import object_list
 from schedule.models import Calendar
-from schedule.feeds import UpcomingEventsFeed
-from schedule.feeds import CalendarICalendar
+#from schedule.feeds import UpcomingEventsFeed
+#from schedule.feeds import CalendarICalendar
 from schedule.periods import Year, Month, Week, Day
 
 info_dict = {
@@ -89,7 +89,6 @@ url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d
     name="edit_occurrence_by_date"),
     
 
-(r'^ical/calendar/(.*)/$', CalendarICalendar()),
 url(r'^$', object_list, info_dict, name='schedule'), 
 """
 #feed urls - temporary disable the feed url because it doesn't compatible
@@ -97,5 +96,6 @@ url(r'^$', object_list, info_dict, name='schedule'),
 url(r'^feed/calendar/(.*)/$',
     'django.contrib.syndication.views.feed', 
     { "feed_dict": { "upcoming": UpcomingEventsFeed } }),
+(r'^ical/calendar/(.*)/$', CalendarICalendar()),
 """
 )
