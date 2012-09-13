@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, include, url 
 from django.views.generic.list_detail import object_list
 from schedule.models import Calendar
 #from schedule.feeds import UpcomingEventsFeed
@@ -10,7 +10,23 @@ info_dict = {
 }
 
 urlpatterns = patterns('',
+    #Event Urls
+    url(r'^event/create/(?P<calendar_slug>[-\w]+)/$',
+        'schedule.views.create_or_edit_event',
+        name='calendar_create_event'),
+    url(r'^event/edit/(?P<calendar_slug>[-\w]+)/(?P<event_id>\d+)/$',
+        'schedule.views.create_or_edit_event',
+        name='edit_event'),
+    url(r'^event/(?P<event_id>\d+)/$',
+        'schedule.views.event',
+        name="event"), 
+    url(r'^event/delete/(?P<event_id>\d+)/$',
+        'schedule.views.delete_event',
+        name="delete_event"),
+    url(r'^$', object_list, info_dict, name='schedule'), 
+)
 
+"""
 # urls for Calendars
 url(r'^calendar/$',
     object_list,
@@ -52,20 +68,6 @@ url(r'^calendar/(?P<calendar_slug>[-\w]+)/$',
     name = "calendar_home",
     ),
 
-#Event Urls
-url(r'^event/create/(?P<calendar_slug>[-\w]+)/$',
-    'schedule.views.create_or_edit_event',
-    name='calendar_create_event'),
-url(r'^event/edit/(?P<calendar_slug>[-\w]+)/(?P<event_id>\d+)/$',
-    'schedule.views.create_or_edit_event',
-    name='edit_event'),
-url(r'^event/(?P<event_id>\d+)/$',
-    'schedule.views.event',
-    name="event"), 
-url(r'^event/delete/(?P<event_id>\d+)/$',
-    'schedule.views.delete_event',
-    name="delete_event"),
-
 #urls for already persisted occurrences
 url(r'^occurrence/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
     'schedule.views.occurrence',
@@ -89,8 +91,6 @@ url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d
     name="edit_occurrence_by_date"),
     
 
-url(r'^$', object_list, info_dict, name='schedule'), 
-"""
 #feed urls - temporary disable the feed url because it doesn't compatible
 #with Django version >= 1.2
 url(r'^feed/calendar/(.*)/$',
@@ -98,4 +98,3 @@ url(r'^feed/calendar/(.*)/$',
     { "feed_dict": { "upcoming": UpcomingEventsFeed } }),
 (r'^ical/calendar/(.*)/$', CalendarICalendar()),
 """
-)
