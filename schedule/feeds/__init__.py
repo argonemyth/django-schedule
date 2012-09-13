@@ -1,11 +1,16 @@
 from schedule.models import Calendar
-from django.contrib.syndication.feeds import FeedDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from schedule.feeds.atom import Feed
 from schedule.feeds.icalendar import ICalendarFeed
 from django.http import HttpResponse
 import datetime, itertools
+try:
+    # Since Django 1.2, FeedDoesNotExist has been moved to views 
+    from django.contrib.syndication.views import FeedDoesNotExist
+except:
+    # In case someone is still using Django 1.1
+    from django.contrib.syndication.feeds import FeedDoesNotExist
 
 class UpcomingEventsFeed(Feed):
     feed_id = "upcoming"
