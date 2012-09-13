@@ -9,7 +9,7 @@ if sys.version_info < (3, 0):
 
 setup(
     name='django-schedule',
-    version='0.5b',
+    version='0.51b',
     description='A calendaring app for Django.',
     author='Anthony Robert Hauber',
     author_email='thauber@gmail.com',
