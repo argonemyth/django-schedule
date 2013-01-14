@@ -24,6 +24,29 @@ urlpatterns = patterns('',
         'schedule.views.delete_event',
         name="delete_event"),
     url(r'^$', object_list, info_dict, name='schedule'), 
+
+    #urls for already persisted occurrences
+    url(r'^occurrence/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
+        'schedule.views.occurrence',
+        name="occurrence"), 
+    url(r'^occurrence/cancel/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
+        'schedule.views.cancel_occurrence',
+        name="cancel_occurrence"),
+    url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
+        'schedule.views.edit_occurrence',
+        name="edit_occurrence"),
+
+    #urls for unpersisted occurrences
+    url(r'^occurrence/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
+        'schedule.views.occurrence', 
+        name="occurrence_by_date"),
+    url(r'^occurrence/cancel/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
+        'schedule.views.cancel_occurrence', 
+        name="cancel_occurrence_by_date"),
+    url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
+        'schedule.views.edit_occurrence', 
+        name="edit_occurrence_by_date"),
+        
 )
 
 """
@@ -68,28 +91,6 @@ url(r'^calendar/(?P<calendar_slug>[-\w]+)/$',
     name = "calendar_home",
     ),
 
-#urls for already persisted occurrences
-url(r'^occurrence/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
-    'schedule.views.occurrence',
-    name="occurrence"), 
-url(r'^occurrence/cancel/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
-    'schedule.views.cancel_occurrence',
-    name="cancel_occurrence"),
-url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<occurrence_id>\d+)/$',
-    'schedule.views.edit_occurrence',
-    name="edit_occurrence"),
-
-#urls for unpersisted occurrences
-url(r'^occurrence/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
-    'schedule.views.occurrence', 
-    name="occurrence_by_date"),
-url(r'^occurrence/cancel/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
-    'schedule.views.cancel_occurrence', 
-    name="cancel_occurrence_by_date"),
-url(r'^occurrence/edit/(?P<event_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/(?P<minute>\d+)/(?P<second>\d+)/$',
-    'schedule.views.edit_occurrence', 
-    name="edit_occurrence_by_date"),
-    
 
 #feed urls - temporary disable the feed url because it doesn't compatible
 #with Django version >= 1.2

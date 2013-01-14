@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import date
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.timezone import now
 import datetime
 from dateutil import rrule
 from schedule.models.rules import Rule
@@ -29,7 +30,7 @@ class Event(models.Model):
     description = models.TextField(_("description"), null = True, blank = True)
     location = models.CharField(_("location"), max_length = 300, null = True, blank = True)
     creator = models.ForeignKey(User, null = True, verbose_name=_("creator"))
-    created_on = models.DateTimeField(_("created on"), default = datetime.datetime.now)
+    created_on = models.DateTimeField(_("created on"), default = now)
     rule = models.ForeignKey(Rule, null = True, blank = True, verbose_name=_("rule"), help_text=_("Select '----' for a one time only event."))
     end_recurring_period = models.DateTimeField(_("end recurring period"), null = True, blank = True, help_text=_("This date is ignored for one time only events."))
     calendar = models.ForeignKey(Calendar, blank=True, null=True)
@@ -149,7 +150,8 @@ class Event(models.Model):
         """
 
         if after is None:
-            after = datetime.datetime.now()
+            #after = datetime.datetime.now()
+            after = now()
         rule = self.get_rrule_object()
         if rule is None:
             if self.end > after:
