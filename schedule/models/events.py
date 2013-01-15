@@ -184,6 +184,12 @@ class Event(models.Model):
         for o in self.occurrences_after():
             return o
     
+    def current_occurrence(self):
+        """
+        Get or create the current occurrence for RSVP.
+        """
+        return self.get_occurrence(self.start)
+
 
 class EventRelationManager(models.Manager):
     '''
