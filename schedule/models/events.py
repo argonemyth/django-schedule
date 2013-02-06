@@ -190,6 +190,17 @@ class Event(models.Model):
         """
         return self.get_occurrence(self.start)
 
+    def get_reservations(self):
+        """
+        Get a list of all the users who made RSVP for the events.
+        We will get the list for all the occurrences of the event.
+        """
+        users = []
+        for o in self.occurrence_set.all():
+            o_users = o.eventreservations.reservations.all()
+            users += [ u for u in o_users if u not in users ]
+        return users
+
 
 class EventRelationManager(models.Manager):
     '''
