@@ -1,6 +1,8 @@
 from django.db.models.signals import pre_save
 
-from models import Event, Calendar
+from schedule.models import Event, Calendar
+from schedule.tasks import send_emails
+from schedule.models.signals import event_changed
 
 def optionnal_calendar(sender, **kwargs):
     event = kwargs.pop('instance')
@@ -18,3 +20,9 @@ def optionnal_calendar(sender, **kwargs):
     return True
 
 pre_save.connect(optionnal_calendar)
+
+
+def send_updates(sender, event, **kwargs):
+    send_emails.delay(event)
+    
+event_changed.connect(send_updates)

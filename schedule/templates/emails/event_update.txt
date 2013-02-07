@@ -1,0 +1,14 @@
+Dear {{ recipient }}, 
+
+You are getting this email because you once reserved the
+{{ event.title }}. The date or the location of the event
+has been changed, please go to the event page to update your
+reservation. 
+
+http://{{ site }}{{ event.get_absolute_url }}
+
+Looking forward to see you there!
+
+Best,
+
+MPython Email Bot

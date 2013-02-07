@@ -13,13 +13,16 @@ from dateutil import rrule
 from schedule.models.rules import Rule
 from schedule.models.calendars import Calendar
 from schedule.utils import OccurrenceReplacer
+from schedule.models.mixin import DiffingMixin
+from schedule.models.signals import event_changed
+
 
 class EventManager(models.Manager):
 
     def get_for_object(self, content_object, distinction=None, inherit=True):
         return EventRelation.objects.get_events_for_object(content_object, distinction, inherit)
 
-class Event(models.Model):
+class Event(DiffingMixin, models.Model):
     '''
     This model stores meta data for a date.  You can relate this data to many
     other models.
@@ -194,12 +197,23 @@ class Event(models.Model):
         """
         Get a list of all the users who made RSVP for the events.
         We will get the list for all the occurrences of the event.
-        """
+       """
         users = []
         for o in self.occurrence_set.all():
             o_users = o.eventreservations.reservations.all()
             users += [ u for u in o_users if u not in users ]
         return users
+
+    def save(self, *args, **kwargs):
+        """
+        Need to override the save function to check changed fields.
+        """
+        important_fields = ['start', 'end', 'location']
+        changed_fields = self._get_changed_fields()
+        if any(f in changed_fields for f in important_fields):
+            event_changed.send(sender=Event, event=self)
+        super(Event, self).save(*args, **kwargs)
+        
 
 
 class EventRelationManager(models.Manager):
